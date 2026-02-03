@@ -16,14 +16,14 @@ DATA_DIR = "./data"
 # Function to extract data
 def extract_data():
     """Load structured CSVs."""
-    print("Loading customers.csv and transactions.csv...")
+    print("=====Loading customers.csv and transactions.csv=====")
 
     # Load CSV files
     customers = pd.read_csv(os.path.join(DATA_DIR, "customers.csv"))
     transactions = pd.read_csv(os.path.join(DATA_DIR, "transactions.csv"))
     
     # Log the shape of the loaded data
-    print(f"Loaded {len(customers)} customers and {len(transactions)} transactions")
+    print(f"=====Loaded {len(customers)} customers and {len(transactions)} transactions=====")
     
     # Return the loaded data
     return customers, transactions
