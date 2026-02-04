@@ -11,6 +11,6 @@ def standardize_columns(input_data):
 
 EXCHANGE_RATES = {
     "EUR": 1.0,
-    "SEK": 1 / 10.53,  # ≈ 0.09496
-    "NOK": 1 / 11.38   # ≈ 0.08787
+    "SEK": 0.09496
+    "NOK": 0.08787
 }
