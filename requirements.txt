@@ -1,0 +1,4 @@
+uv
+pandas
+numpy
+scikit-learn
