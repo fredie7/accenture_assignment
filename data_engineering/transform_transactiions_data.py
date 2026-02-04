@@ -9,7 +9,7 @@ from utils.helper_functions import (
 )
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO)
+# logging.basicConfig(level=logging.INFO)
 
 
 def transform_transactions_data() -> pd.DataFrame:

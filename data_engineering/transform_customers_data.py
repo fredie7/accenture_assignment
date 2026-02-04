@@ -8,10 +8,10 @@ from utils.helper_functions import standardize_columns, DuplicateDataError
 
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO)
+# logging.basicConfig(level=logging.INFO)
 
 
-def transform_customer_data() -> pd.DataFrame:
+def transform_customers_data() -> pd.DataFrame:
     """
     Extract and transform customer data:
     - Standardize column names
@@ -54,4 +54,4 @@ def transform_customer_data() -> pd.DataFrame:
 
 
 if __name__ == "__main__":
-    transformed_customers = transform_customer_data()
+    transformed_customers = transform_customers_data()

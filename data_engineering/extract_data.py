@@ -13,17 +13,19 @@ from sklearn.preprocessing import StandardScaler
 # Define directory containing csv files
 DATA_DIR = "./data"
 
+logger = logging.getLogger(__name__)
+
 # Function to extract data
 def extract_data():
     """Load structured CSVs."""
-    print("=====Loading customers.csv and transactions.csv=====")
+    logger.info("=====Loading customers.csv and transactions.csv=====")
 
     # Load CSV files
     customers = pd.read_csv(os.path.join(DATA_DIR, "customers.csv"))
     transactions = pd.read_csv(os.path.join(DATA_DIR, "transactions.csv"))
     
     # Log the shape of the loaded data
-    print(f"=====Loaded {len(customers)} customers and {len(transactions)} transactions=====")
+    logger.info(f"=====Loaded {len(customers)} customers and {len(transactions)} transactions=====")
     
     # Return the loaded data
     return customers, transactions
