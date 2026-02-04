@@ -1,6 +1,6 @@
 # Import dependencies
 from data_extraction import extract_data
-from utils.helper import standardize_columns
+from utils.helper import standardize_columns, DuplicateDataError
 
 import pandas as pd
 
@@ -28,9 +28,15 @@ def transform_customer_data():
     print(customers_df.isnull().sum())
 
     print("=====Checking for duplicate records on customer_id=====")
-    print(customers_df.duplicated(subset=["customer_id"]).sum())
+    customer_df_duplicates = customers_df.duplicated(subset=["customer_id"]).sum()
+    print(customer_df_duplicates)
     
-    print("=====No duplicate records on customer_id=====")
+    try:
+        if customer_df_duplicates > 0:
+            raise DuplicateDataError(f"Duplicate records found: {customer_df_duplicates}")
+    except DuplicateDataError as e:
+        print(f"Error: {e}")
+    print("=====No duplicate records found=====")
     
     
     print("=====Completed customer data transformation=====")

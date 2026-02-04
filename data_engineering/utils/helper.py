@@ -1,5 +1,4 @@
 # standardize columns
-
 def standardize_columns(input_data):
     # Convert all column names to lowercase
     input_data.columns = input_data.columns.str.lower()
@@ -9,8 +8,14 @@ def standardize_columns(input_data):
     
     return input_data
 
+# Currency exchange rates
 EXCHANGE_RATES = {
     "EUR": 1.0,
-    "SEK": 0.09496
+    "SEK": 0.09496,
     "NOK": 0.08787
 }
+
+# Custom exception for duplicate data
+class DuplicateDataError(Exception):
+    """Custom exception for duplicate data errors."""
+    pass
