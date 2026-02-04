@@ -61,3 +61,7 @@ cross_border_summary = (
     .sort_values("total_amount_eur", ascending=False)
 )
 print(cross_border_summary.head())
+
+print(business_data.isna().sum())
+
+business_data.to_csv("data/processed/business_data.csv", index=False)
