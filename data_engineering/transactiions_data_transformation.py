@@ -24,7 +24,7 @@ def transform_transactions_data() -> pd.DataFrame:
     logger.info("Retrieving transactions data...")
     _, transactions_df = extract_data()
     logger.info(f"Initial transactions shape: {transactions_df.shape}")
-
+    
     logger.info("Standardizing column names...")
     transactions_df = standardize_columns(transactions_df)
 
@@ -113,7 +113,7 @@ def transform_transactions_data() -> pd.DataFrame:
 
     logger.info(f"Final transactions shape: {transactions_df.shape}")
     logger.info("Transactions data transformation completed successfully.")
-    print(transactions_df.head())
+    
     return transactions_df
 
 
