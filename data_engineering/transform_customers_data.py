@@ -3,8 +3,8 @@ from typing import Tuple
 
 import pandas as pd
 
-from data_extraction import extract_data
-from utils.helper import standardize_columns, DuplicateDataError
+from extract_data import extract_data
+from utils.helper_functions import standardize_columns, DuplicateDataError
 
 
 logger = logging.getLogger(__name__)
