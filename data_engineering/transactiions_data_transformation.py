@@ -113,7 +113,7 @@ def transform_transactions_data() -> pd.DataFrame:
 
     logger.info(f"Final transactions shape: {transactions_df.shape}")
     logger.info("Transactions data transformation completed successfully.")
-
+    print(transactions_df.head())
     return transactions_df
 
 
