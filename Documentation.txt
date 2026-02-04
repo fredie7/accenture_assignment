@@ -1,0 +1,9 @@
+
+
+
+To prevent downstream inconsistencies:
+Domain knowledge has it that asides the NOK and SEK, the EUR represents
+a standard base currency accross the Nordics where our client is from.
+So, first I replicated the missing currency values in a separate column called currency_imputed for
+data lineage tracking, then replaced the missing currencies with the EUR on the currency column. 
+I normalized all currency codes to uppercase ISO format as well, then, mapped eur into EUR.
