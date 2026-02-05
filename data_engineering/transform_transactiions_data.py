@@ -28,6 +28,12 @@ def transform_transactions_data() -> pd.DataFrame:
     logger.info("Standardizing column names...")
     transactions_df = standardize_columns(transactions_df)
 
+    logger.info("Replacing food with Food in the category column...")
+    transactions_df["category"] = transactions_df["category"].str.replace("food", "Food")
+
+    logger.info("Replacing electronics with Electronics in the category column...")
+    transactions_df["category"] = transactions_df["category"].str.replace("electronics", "Electronics")
+
     logger.info("Converting timestamp to datetime...")
     transactions_df["timestamp"] = pd.to_datetime(
         transactions_df["timestamp"],
@@ -113,7 +119,7 @@ def transform_transactions_data() -> pd.DataFrame:
 
     logger.info(f"Final transactions shape: {transactions_df.shape}")
     logger.info("Transactions data transformation completed successfully.")
-    
+  
     return transactions_df
 
 
