@@ -319,43 +319,40 @@ def platform_statistics() -> str:
         f"- Countries served: {df['country'].nunique()}"
     )
 
-    # =========================
-# Tool: Top Active & High Value Customers
-# =========================
 @tool
-def top_customers(top_n: int = 5) -> Dict:
+def high_value_by_frequency() -> Dict:
     """
-    Returns the top N most active and top N highest value customers.
-
-    Parameters
-    ----------
-    top_n: int
-        Number of customers to return per category
+    Returns the top 5 customers with the highest number of transactions.
     """
-    if top_n <= 0:
-        return {"error": "top_n must be positive"}
-
-    # Group by customer
-    customer_stats = business_data.groupby("customer_id").agg(
+    stats = df.groupby("customer_id").agg(
         transaction_count=("transaction_id", "count"),
-        total_spend=("amount_eur", "sum"),
-        avg_txn_value=("amount_eur", "mean")
+        total_spend=("amount_eur", "sum")
     ).reset_index()
 
-    # Top N most active
-    top_active = customer_stats.sort_values(
-        "transaction_count", ascending=False
-    ).head(top_n)[["customer_id", "transaction_count"]].to_dict(orient="records")
-
-    # Top N high-value
-    top_value = customer_stats.sort_values(
-        "total_spend", ascending=False
-    ).head(top_n)[["customer_id", "total_spend"]].to_dict(orient="records")
-
+    # Top 5 customers by transaction count
+    top_customers = stats.sort_values("transaction_count", ascending=False).head(5)
+    
     return {
-        "top_active_customers": top_active,
-        "top_value_customers": top_value
+        "high_value_by_frequency": top_customers[["customer_id", "transaction_count"]].to_dict(orient="records")
     }
+
+@tool
+def high_value_by_spend() -> Dict:
+    """
+    Returns the top 5 customers with the highest total spend.
+    """
+    stats = business_data.groupby("customer_id").agg(
+        transaction_count=("transaction_id", "count"),
+        total_spend=("amount_eur", "sum")
+    ).reset_index()
+
+    # Top 5 customers by spend
+    top_customers = stats.sort_values("total_spend", ascending=False).head(5)
+    
+    return {
+        "high_value_by_spend": top_customers[["customer_id", "total_spend"]].to_dict(orient="records")
+    }
+
 
 
 
@@ -375,7 +372,8 @@ tools = [
     list_transaction_categories,
     average_transaction_amount,
     platform_statistics,
-    top_customers,
+    high_value_by_frequency,
+    high_value_by_spend,
 
 ]
 
