@@ -1,3 +1,10 @@
+import sys
+from pathlib import Path
+
+# Add parent directory to sys.path
+sys.path.append(str(Path(__file__).resolve().parent.parent / "bronze"))
+sys.path.append(str(Path(__file__).resolve().parent.parent.parent / ""))
+
 import logging
 import pandas as pd
 
@@ -50,7 +57,7 @@ def transform_transactions_data() -> pd.DataFrame:
     duplicate_count = transactions_df.duplicated("transaction_id").sum()
 
     if duplicate_count > 0:
-        logger.warning(f"Found {duplicate_count} duplicate transaction_id records")
+        # logger.warning(f"Found {duplicate_count} duplicate transaction_id records")
 
         dup_df = transactions_df[transactions_df.duplicated("transaction_id", keep=False)]
 
@@ -119,7 +126,7 @@ def transform_transactions_data() -> pd.DataFrame:
 
     logger.info(f"Final transactions shape: {transactions_df.shape}")
     logger.info("Transactions data transformation completed successfully.")
-  
+    
     return transactions_df
 
 

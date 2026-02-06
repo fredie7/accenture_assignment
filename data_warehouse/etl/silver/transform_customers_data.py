@@ -1,9 +1,16 @@
+import sys
+from pathlib import Path
+
+# Add parent directory to sys.path
+sys.path.append(str(Path(__file__).resolve().parent.parent / "bronze"))
+sys.path.append(str(Path(__file__).resolve().parent.parent.parent / ""))
+
 import logging
 from typing import Tuple
 
 import pandas as pd
 
-from ..bronze.extract_data import extract_data
+from extract_data import extract_data
 from utils.helper_functions import standardize_columns, DuplicateDataError
 
 
@@ -48,7 +55,12 @@ def transform_customers_data() -> pd.DataFrame:
         raise DuplicateDataError(
             f"Duplicate customer_id values found after deduplication: {duplicate_count}"
         )
-
+    customers_df.loc[
+    customers_df["customer_id"] == 2386,
+    "email"
+    ] = "dwyane@gmail.com"
+    print(customers_df.shape)
+    print(customers_df.head(2))
     logger.info("Customer data transformation completed successfully.")
     return customers_df
 
