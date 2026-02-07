@@ -26,4 +26,4 @@ I deleted the missing values since none of those factors seemed concurrently rep
 ALERT:
 This is to report that the emails of all customers appear similar
 and standard practice requires that I report such error to the source for a 
-redress..
+redress...
