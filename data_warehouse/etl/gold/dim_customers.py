@@ -1,85 +1,15 @@
 import sys
 from pathlib import Path
+import pandas as pd
 
 # Add parent directory to sys.path
 sys.path.append(str(Path(__file__).resolve().parent.parent / "silver"))
 
-import logging
-from transform_transactiions_data import transform_transactions_data
+# from transform_transactiions_data import transform_transactions_data
 from transform_customers_data import transform_customers_data
 
-import pandas as pd
-
-logger = logging.getLogger(__name__)
-
-transactions_df = transform_transactions_data()
+# transactions_df = transform_transactions_data()
 customers_df = transform_customers_data()
-
-# Create the fact table
-# High-value transaction flag (example > 500 EUR)
-transactions_df['is_high_value_transaction'] = (transactions_df['amount_eur'] > 500).astype(int)
-
-# Time-based features
-transactions_df['transaction_hour'] = transactions_df['timestamp'].dt.hour
-transactions_df['transaction_day_of_week'] = transactions_df['timestamp'].dt.dayofweek
-transactions_df['transaction_is_weekend'] = transactions_df['transaction_day_of_week'] >= 5
-
-# Fact table
-fact_transactions = transactions_df[[
-    'transaction_id',
-    'customer_id',
-    'timestamp',
-    'amount_eur',
-    'exchange_rate',
-    'is_high_value_transaction',
-    'transaction_hour',
-    'transaction_day_of_week',
-    'transaction_is_weekend'
-]].copy()
-
-# Create a dimension table for the date for time series analysis
-dim_date = pd.DataFrame({
-    "date": transactions_df["timestamp"].dt.date.unique()
-})
-
-dim_date["date_key"] = range(1, len(dim_date) + 1)
-dim_date["day"] = pd.to_datetime(dim_date["date"]).dt.day
-dim_date["month"] = pd.to_datetime(dim_date["date"]).dt.month
-dim_date["year"] = pd.to_datetime(dim_date["date"]).dt.year
-dim_date["weekday"] = pd.to_datetime(dim_date["date"]).dt.weekday
-
-# Create dimension table for currency
-dim_currency = (
-    transactions_df[["currency"]]
-)
-
-dim_currency["currency_key"] = range(1, len(dim_currency) + 1)
-dim_currency["currency_imputed"] = transactions_df["currency_imputed"].notna()
-dim_currency['conversion_type'] = dim_currency['currency_imputed'].map(
-    lambda x: 'imputed' if x else 'actual'
-)
-dim_currency = dim_currency[["currency_key", "currency","currency_imputed","conversion_type"]]
-
-
-# Create dimension table for category
-dim_category = (
-    transactions_df[["category"]]
-)
-
-dim_category["category_key"] = range(1, len(dim_category) + 1)
-dim_category['is_refundable'] = dim_category['category'].map({
-    'Electronics': True,
-    'Food': False
-}).fillna(False)
-
-dim_category['return_window_days'] = dim_category['category'].map({
-    'Electronics': 30,
-    'Food': 0
-}).fillna(0)
-dim_category = dim_category[["category_key", "category","is_refundable","return_window_days"]]
-
-
-
 
 # Create dimension table for customer
 dim_customer = pd.DataFrame(columns=[
@@ -224,17 +154,14 @@ def scd2_upsert_customer(dim_customer: pd.DataFrame,
     return dim_customer
 
 
+# Initial load test
+# try:
+#     dim_customer = scd2_upsert_customer(dim_customer, customers_df)
+#     print("==>> SCD Type 2 tests passed")
+#     print(dim_customer.sort_values(
+#     ["customer_id", "effective_from"]
+# ))
 
-try:
-    dim_customer = scd2_upsert_customer(dim_customer, customers_df)
-    print("✅ SCD Type 2 tests passed")
-    print(dim_customer.sort_values(
-    ["customer_id", "effective_from"]
-))
-
-except AssertionError as e:
-    print("❌ SCD Type 2 test failed:")
-    print(e)
-
-
-
+# except AssertionError as e:
+#     print("==> SCD Type 2 test failed:")
+#     print(e)
