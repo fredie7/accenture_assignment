@@ -67,6 +67,8 @@ dim_category["category_key"] = range(1, len(dim_category) + 1)
 dim_category = dim_category[["category_key", "category"]]
 
 
+
+
 # Create dimension table for customer
 dim_customer = pd.DataFrame(columns=[
     "customer_key",
@@ -79,23 +81,30 @@ dim_customer = pd.DataFrame(columns=[
     "is_current"
 ])
 
-def scd2_upsert_customer(dim_customer, stg_customers):
+
+def scd2_upsert_customer(dim_customer: pd.DataFrame,
+                         stg_customers: pd.DataFrame) -> pd.DataFrame:
+    """
+    Perform SCD Type 2 upsert for customer dimension.
+    """
+
     today = pd.Timestamp.today().normalize()
 
-    # -------------------------
-    # CASE 1: Empty dimension → all rows are new
-    # -------------------------
+    # Ensure staging has unique business keys
+    stg_customers = stg_customers.drop_duplicates(subset=["customer_id"])
+
+    # ------------------------------------------------------------------
+    # CASE 1: Empty dimension → insert all staging rows
+    # ------------------------------------------------------------------
     if dim_customer.empty:
         inserts = stg_customers.copy()
 
-        inserts = inserts.assign(
-            customer_key=range(1, len(inserts) + 1),
-            effective_from=today,
-            effective_to=pd.NaT,
-            is_current=True
-        )
+        inserts["customer_key"] = range(1, len(inserts) + 1)
+        inserts["effective_from"] = today
+        inserts["effective_to"] = pd.NaT
+        inserts["is_current"] = True
 
-        return inserts[[
+        result = inserts[[
             "customer_key",
             "customer_id",
             "email",
@@ -106,9 +115,17 @@ def scd2_upsert_customer(dim_customer, stg_customers):
             "is_current"
         ]]
 
-    # -------------------------
-    # CASE 2: Normal SCD2 logic
-    # -------------------------
+        # ------------------ TESTS ------------------
+        assert result["customer_key"].is_unique, "Customer keys are not unique"
+        assert result["is_current"].all(), "Initial rows must be current"
+        assert result["effective_to"].isna().all(), "Initial rows must be open-ended"
+        # -------------------------------------------
+
+        return result
+
+    # ------------------------------------------------------------------
+    # CASE 2: Incremental SCD2 logic
+    # ------------------------------------------------------------------
     dim_current = dim_customer[dim_customer["is_current"]].copy()
 
     merged = stg_customers.merge(
@@ -118,83 +135,94 @@ def scd2_upsert_customer(dim_customer, stg_customers):
         suffixes=("_stg", "_dim")
     )
 
+    # Identify new customers
     is_new = merged["customer_key"].isna()
 
-    is_changed = (
-        ~is_new &
-        (
-            (merged["email_stg"] != merged["email_dim"]) |
-            (merged["country_stg"] != merged["country_dim"])
-        )
+    # NULL-safe change detection
+    email_changed = (
+        merged["email_stg"].fillna("") != merged["email_dim"].fillna("")
     )
 
-    # Expire changed records
-    dim_customer.loc[
-        dim_customer["customer_key"].isin(merged.loc[is_changed, "customer_key"]),
-        ["effective_to", "is_current"]
-    ] = [today, False]
+    country_changed = (
+        merged["country_stg"].fillna("") != merged["country_dim"].fillna("")
+    )
 
-    # Prepare inserts
+    is_changed = ~is_new & (email_changed | country_changed)
+
+    # ------------------------------------------------------------------
+    # Expire existing records
+    # ------------------------------------------------------------------
+    keys_to_expire = merged.loc[is_changed, "customer_key"]
+
+    if not keys_to_expire.empty:
+        dim_customer.loc[
+            dim_customer["customer_key"].isin(keys_to_expire),
+            ["effective_to", "is_current"]
+        ] = [today, False]
+
+        # ------------------ TESTS ------------------
+        expired = dim_customer.loc[
+            dim_customer["customer_key"].isin(keys_to_expire)
+        ]
+        assert not expired["is_current"].any(), "Expired rows still marked current"
+        assert expired["effective_to"].notna().all(), "Expired rows missing end date"
+        # -------------------------------------------
+
+    # ------------------------------------------------------------------
+    # Prepare inserts (new + changed)
+    # ------------------------------------------------------------------
     inserts = merged.loc[is_new | is_changed, [
         "customer_id",
         "email_stg",
         "country_stg",
-        "signup_date"
+        "signup_date_stg"
     ]].rename(columns={
         "email_stg": "email",
-        "country_stg": "country"
+        "country_stg": "country",
+        "signup_date_stg": "signup_date"
     })
+    assert "signup_date_stg" in merged.columns, "signup_date missing after merge"
 
-    if not inserts.empty:
-        next_key = dim_customer["customer_key"].max() + 1
+    if inserts.empty:
+        return dim_customer
 
-        inserts = inserts.assign(
-            customer_key=range(next_key, next_key + len(inserts)),
-            effective_from=today,
-            effective_to=pd.NaT,
-            is_current=True
-        )
+    next_key = dim_customer["customer_key"].max() + 1
 
-        dim_customer = pd.concat([dim_customer, inserts], ignore_index=True)
+    inserts["customer_key"] = range(next_key, next_key + len(inserts))
+    inserts["effective_from"] = today
+    inserts["effective_to"] = pd.NaT
+    inserts["is_current"] = True
+
+    dim_customer = pd.concat([dim_customer, inserts], ignore_index=True)
+
+    # ------------------ TESTS ------------------
+    current_rows = dim_customer[dim_customer["is_current"]]
+
+    assert current_rows["customer_id"].is_unique, \
+        "More than one current row per customer detected"
+
+    assert dim_customer["customer_key"].is_unique, \
+        "Customer key uniqueness violated"
+
+    assert dim_customer.loc[
+        dim_customer["is_current"], "effective_to"
+    ].isna().all(), "Current rows must have NULL effective_to"
+    # -------------------------------------------
 
     return dim_customer
 
 
-dim_customer = scd2_upsert_customer(dim_customer, customers_df)
 
-# print(dim_customer.shape)
-# print(dim_customer.head())
-# print("=*30")
-# print(dim_customer.loc[dim_customer["customer_id"] == 2386])
+try:
+    dim_customer = scd2_upsert_customer(dim_customer, customers_df)
+    print("✅ SCD Type 2 tests passed")
+    print(dim_customer.sort_values(
+    ["customer_id", "effective_from"]
+))
 
-# 2️⃣ Then put your test code below
-dim_customer = pd.DataFrame(columns=[
-    "customer_key",
-    "customer_id",
-    "email",
-    "country",
-    "signup_date",
-    "effective_from",
-    "effective_to",
-    "is_current"
-])
-
-stg_day1 = pd.DataFrame({
-    "customer_id": [1, 2],
-    "email": ["a@gmail.com", "b@gmail.com"],
-    "country": ["FI", "SE"],
-    "signup_date": ["2024-01-01", "2024-01-02"]
-})
+except AssertionError as e:
+    print("❌ SCD Type 2 test failed:")
+    print(e)
 
 
 
-
-dim_customer = scd2_upsert_customer(dim_customer, stg_day1)
-print("==>",dim_customer)
-
-expired = dim_customer[~dim_customer["is_current"]]
-assert expired["effective_to"].notna().all()
-
-
-
-# print(dim_customer.columns)
