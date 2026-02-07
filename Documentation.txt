@@ -21,3 +21,9 @@ For the mamoth 2000 duplicate transaction_id's in the transaction data, I
 investigated the timestamp,amount and customer for possible late-arriving data and pipeline retries to retain the
 the most recent version.
 I deleted the missing values since none of those factors seemed concurrently repititive.
+
+
+ALERT:
+This is to report that the emails of all customers appear similar
+and standard practice requires that I report such error to the source for a 
+redress.
