@@ -17,7 +17,7 @@ customers_df = transform_customers_data()
 
 # Create the fact table
 # High-value transaction flag (example > 500 EUR)
-transactions_df['high_value_transactions'] = (transactions_df['amount_eur'] > 500).astype(int)
+transactions_df['is_high_value_transaction'] = (transactions_df['amount_eur'] > 500).astype(int)
 
 # Time-based features
 transactions_df['transaction_hour'] = transactions_df['timestamp'].dt.hour
@@ -31,7 +31,7 @@ fact_transactions = transactions_df[[
     'timestamp',
     'amount_eur',
     'exchange_rate',
-    'high_value_transactions',
+    'is_high_value_transaction',
     'transaction_hour',
     'transaction_day_of_week',
     'transaction_is_weekend'
@@ -54,8 +54,11 @@ dim_currency = (
 )
 
 dim_currency["currency_key"] = range(1, len(dim_currency) + 1)
-dim_currency["currency_imputed"] = transactions_df["currency_imputed"]
-dim_currency = dim_currency[["currency_key", "currency","currency_imputed"]]
+dim_currency["currency_imputed"] = transactions_df["currency_imputed"].notna()
+dim_currency['conversion_type'] = dim_currency['currency_imputed'].map(
+    lambda x: 'imputed' if x else 'actual'
+)
+dim_currency = dim_currency[["currency_key", "currency","currency_imputed","conversion_type"]]
 
 
 # Create dimension table for category
@@ -64,7 +67,16 @@ dim_category = (
 )
 
 dim_category["category_key"] = range(1, len(dim_category) + 1)
-dim_category = dim_category[["category_key", "category"]]
+dim_category['is_refundable'] = dim_category['category'].map({
+    'Electronics': True,
+    'Food': False
+}).fillna(False)
+
+dim_category['return_window_days'] = dim_category['category'].map({
+    'Electronics': 30,
+    'Food': 0
+}).fillna(0)
+dim_category = dim_category[["category_key", "category","is_refundable","return_window_days"]]
 
 
 
