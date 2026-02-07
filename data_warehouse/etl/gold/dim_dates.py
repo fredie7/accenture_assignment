@@ -65,7 +65,7 @@ def build_dim_date(transform_transactions_fn):
             "transaction_month",
             "transaction_month_name",
             "transaction_year",
-            "transaction_weekday",
+            "transaction_weekday"
         ]
     ]
 
