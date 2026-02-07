@@ -40,7 +40,7 @@ def transform_transactions_data() -> pd.DataFrame:
 
     logger.info("Replacing electronics with Electronics in the category column...")
     transactions_df["category"] = transactions_df["category"].str.replace("electronics", "Electronics")
-
+    
     logger.info("Converting timestamp to datetime...")
     transactions_df["timestamp"] = pd.to_datetime(
         transactions_df["timestamp"],
@@ -132,7 +132,13 @@ def transform_transactions_data() -> pd.DataFrame:
     # --------------------------------------------------
     transactions_df["transaction_key"] = range(1, len(transactions_df) + 1)
     
-        
+    transactions_df = transactions_df.rename(columns={
+        "currency": "transaction_currency",
+        "timestamp": "transaction_timestamp",
+    })
+    transactions_df["date"] = transactions_df["transaction_timestamp"].dt.date
+
+    print(transactions_df.columns)    
     return transactions_df
 
 

@@ -3,20 +3,21 @@ from pathlib import Path
 import pandas as pd
 
 
-def build_dim_date():
-    # Add parent directory to sys.path
-    sys.path.append(str(Path(__file__).resolve().parent.parent / "silver"))
+# Add parent directory to sys.path at module level
+sys.path.append(str(Path(__file__).resolve().parent.parent / "silver"))
 
-    from transform_transactiions_data import transform_transactions_data
 
-    output_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "processed_data"
-        / "dim_dates.csv"
-    )
+# Output path for the dimension table
+output_path = (
+    Path(__file__).resolve().parent.parent.parent
+    / "processed_data"
+    / "dim_dates.csv"
+)
 
+
+def build_dim_date(transform_transactions_fn):
     # Load and prepare transactions
-    transactions_df = transform_transactions_data()
+    transactions_df = transform_transactions_fn()
     if transactions_df.empty:
         return pd.DataFrame(
             columns=[
@@ -32,33 +33,37 @@ def build_dim_date():
         )
 
     # Create dimension table for date for time series analysis
-    dim_date = pd.DataFrame({
-        "date": transactions_df["timestamp"]
-    })
+       # Extract unique dates from transaction_timestamp
+    unique_dates = (
+        transactions_df["transaction_timestamp"]
+        .dt.date
+        .drop_duplicates()
+        .sort_values()
+        .reset_index(drop=True)
+    )
 
+    # Create dimension table for date for time series analysis
+    dim_date = pd.DataFrame({"date": unique_dates})
     dim_date["date_key"] = range(1, len(dim_date) + 1)
     dim_date["transaction_day"] = pd.to_datetime(dim_date["date"]).dt.day
     dim_date["transaction_month"] = pd.to_datetime(dim_date["date"]).dt.month
+    dim_date["transaction_month_name"] = pd.to_datetime(dim_date["date"]).dt.strftime("%b")
     dim_date["transaction_year"] = pd.to_datetime(dim_date["date"]).dt.year
     dim_date["transaction_weekday"] = pd.to_datetime(dim_date["date"]).dt.strftime("%a")
 
     # Propagate transaction timestamp and key
-    first_timestamp = (
-        transactions_df["timestamp"]
-    )
-    dim_date["transaction_timestamp"] = first_timestamp
-    dim_date["transaction_key"] = (
-        transactions_df["transaction_key"]
-    )
+    dim_date["transaction_timestamp"] = transactions_df["transaction_timestamp"]
+    # dim_date["transaction_key"] = transactions_df["transaction_key"]
 
     # Final column order
     dim_date = dim_date[
         [
             "date_key",
-            "transaction_key",
+            # "transaction_key",
             "date",
             "transaction_day",
             "transaction_month",
+            "transaction_month_name",
             "transaction_year",
             "transaction_weekday",
             "transaction_timestamp",
@@ -68,12 +73,13 @@ def build_dim_date():
     # Save dimension table to CSV
     dim_date.to_csv(output_path, index=False)
 
-    # Return the dimension date table
-    
     return dim_date
 
 
 # Usage
-dim_date = build_dim_date()
+from transform_transactiions_data import transform_transactions_data
+
+dim_date = build_dim_date(transform_transactions_data)
 print(dim_date.head())
 print(len(dim_date))
+print(dim_date.info())

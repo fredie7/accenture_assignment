@@ -3,32 +3,40 @@ from pathlib import Path
 import pandas as pd
 
 
-def build_fact_transactions():
-    # Add parent directory to sys.path
-    sys.path.append(str(Path(__file__).resolve().parent.parent / "silver"))
+# Add parent directory to sys.path
+sys.path.append(str(Path(__file__).resolve().parent.parent / "silver"))
 
-    # Output path for the fact table
-    output_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "processed_data"
-        / "fact_transactions.csv"
-    )
 
+# Load transformation functions at module level
+from transform_transactiions_data import transform_transactions_data
+from transform_customers_data import transform_customers_data
+
+
+# Define output path at module level
+output_path = (
+    Path(__file__).resolve().parent.parent.parent
+    / "processed_data"
+    / "fact_transactions.csv"
+)
+
+
+def build_fact_transactions(
+    transform_transactions_fn,
+    transform_customers_fn,
+    output_path: Path,
+):
     # Load transformed data
-    from transform_transactiions_data import transform_transactions_data
-    from transform_customers_data import transform_customers_data
+    transactions_df = transform_transactions_fn()
+    customers_df = transform_customers_fn()
 
-    transactions_df = transform_transactions_data()
-    customers_df = transform_customers_data()
-
-    # Import dimension tables
+    # Import dimension tables (assumed to be available in the current namespace)
     from dim_customers import dim_customer
     from dim_currency import dim_currency
     from dim_category import dim_category
     from dim_dates import dim_date
 
     # Ensure timestamp is datetime
-    transactions_df["timestamp"] = pd.to_datetime(transactions_df["timestamp"])
+    # transactions_df["timestamp"] = pd.to_datetime(transactions_df["timestamp"])
 
     # Rename columns for clarity
     transactions_df = transactions_df.rename(columns={
@@ -54,20 +62,28 @@ def build_fact_transactions():
             how="left",
         )
         .merge(
-            dim_currency[["transaction_key", "currency_key"]],
-            on="transaction_key",
+            dim_currency[["transaction_currency", "currency_key"]],
+            on="transaction_currency",
             how="left",
         )
         .merge(
-            dim_category[["transaction_key", "category_key"]],
-            on="transaction_key",
+            dim_category[["category", "category_key"]],
+            on="category",
             how="left",
         )
         .merge(
-            dim_date[["transaction_key", "date_key"]],
-            on="transaction_key",
+            dim_date[["date", "date_key"]],
+            left_on=transactions_df["transaction_timestamp"].dt.date,
+            right_on="date",
             how="left",
-        )
+            validate="many_to_one",
+       )
+        # .merge(
+        #     dim_date[["date", "date_key"]],
+        #     left_on=transactions_df["transaction_date"],
+        #     right_on=dim_date["date"],
+        #     how="left",
+        # )
     )
 
     # Final fact table
@@ -85,14 +101,19 @@ def build_fact_transactions():
         "is_high_value_transaction",
     ]]
 
-    # Store data as CSV in the processed_data folder for downstream analytics and AI applications
+    # Store data as CSV
+    output_path.parent.mkdir(parents=True, exist_ok=True)
     fact_transactions.to_csv(output_path, index=False)
 
     return fact_transactions
 
 
 # Usage & Quality checks
-fact_transactions = build_fact_transactions()
+fact_transactions = build_fact_transactions(
+    transform_transactions_data,
+    transform_customers_data,
+    output_path,
+)
 print(fact_transactions.head())
 print(fact_transactions.columns.tolist())
 print(len(fact_transactions))

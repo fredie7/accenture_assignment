@@ -11,6 +11,13 @@ from transform_customers_data import transform_customers_data
 # Load customers
 customers_df = transform_customers_data()
 
+# Output path for the dimension table
+output_path = (
+    Path(__file__).resolve().parent.parent.parent
+    / "processed_data"
+    / "dim_customers.csv"
+)
+
 # Create dimension table for customer
 dim_customer = pd.DataFrame(columns=[
     "customer_key",
@@ -157,14 +164,14 @@ def scd2_upsert_customer(dim_customer: pd.DataFrame,
 
     return dim_customer
 
-# Output path for the dimension table
-output_path = (
-    Path(__file__).resolve().parent.parent.parent
-    / "processed_data"
-    / "dim_customers.csv"
-)
+
 dim_customer = scd2_upsert_customer(dim_customer, customers_df)
 dim_customer.to_csv(output_path, index=False)
+print(dim_customer.info())
+
+
+
+
 # print(dim_customer.sort_values(
 #     ["customer_id", "effective_from"]
 # ))
