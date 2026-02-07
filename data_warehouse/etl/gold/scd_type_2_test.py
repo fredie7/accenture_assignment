@@ -1,5 +1,5 @@
 import pandas as pd
-from model import scd2_upsert_customer, dim_customer,customers_df
+from dim_customers import scd2_upsert_customer, dim_customer,customers_df
 import os
 
 DATA_DIR = "../../raw_data"
