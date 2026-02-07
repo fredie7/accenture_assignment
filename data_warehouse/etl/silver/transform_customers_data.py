@@ -55,12 +55,7 @@ def transform_customers_data() -> pd.DataFrame:
         raise DuplicateDataError(
             f"Duplicate customer_id values found after deduplication: {duplicate_count}"
         )
-    customers_df.loc[
-    customers_df["customer_id"] == 2386,
-    "email"
-    ] = "dwyane@gmail.com"
-    print(customers_df.shape)
-    print(customers_df.head(2))
+   
     logger.info("Customer data transformation completed successfully.")
     return customers_df
 

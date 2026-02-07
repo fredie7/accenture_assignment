@@ -127,6 +127,12 @@ def transform_transactions_data() -> pd.DataFrame:
     logger.info(f"Final transactions shape: {transactions_df.shape}")
     logger.info("Transactions data transformation completed successfully.")
     
+    # --------------------------------------------------
+    # Add a surrogate key for transactions for future merging with dimension tables
+    # --------------------------------------------------
+    transactions_df["transaction_key"] = range(1, len(transactions_df) + 1)
+    
+    
     return transactions_df
 
 

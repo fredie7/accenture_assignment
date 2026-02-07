@@ -8,7 +8,6 @@ sys.path.append(str(Path(__file__).resolve().parent.parent / "silver"))
 # from transform_transactiions_data import transform_transactions_data
 from transform_customers_data import transform_customers_data
 
-# transactions_df = transform_transactions_data()
 customers_df = transform_customers_data()
 
 # Create dimension table for customer
@@ -152,7 +151,10 @@ def scd2_upsert_customer(dim_customer: pd.DataFrame,
     # -------------------------------------------
 
     return dim_customer
-
+dim_customer = scd2_upsert_customer(dim_customer, customers_df)
+# print(dim_customer.sort_values(
+#     ["customer_id", "effective_from"]
+# ))
 
 # Initial load test
 # try:
