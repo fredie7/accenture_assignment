@@ -15,7 +15,7 @@ customers_df = transform_customers_data()
 dim_customer = pd.DataFrame(columns=[
     "customer_key",
     "customer_id",
-    "email",
+    # "email",
     "country",
     "signup_date",
     "effective_from",
@@ -49,7 +49,7 @@ def scd2_upsert_customer(dim_customer: pd.DataFrame,
         result = inserts[[
             "customer_key",
             "customer_id",
-            "email",
+            # "email",
             "country",
             "signup_date",
             "effective_from",
@@ -81,15 +81,16 @@ def scd2_upsert_customer(dim_customer: pd.DataFrame,
     is_new = merged["customer_key"].isna()
 
     # NULL-safe change detection
-    email_changed = (
-        merged["email_stg"].fillna("") != merged["email_dim"].fillna("")
-    )
+    # email_changed = (
+    #     merged["email_stg"].fillna("") != merged["email_dim"].fillna("")
+    # )
 
     country_changed = (
         merged["country_stg"].fillna("") != merged["country_dim"].fillna("")
     )
 
-    is_changed = ~is_new & (email_changed | country_changed)
+    is_changed = ~is_new & country_changed
+    # is_changed = ~is_new & (email_changed | country_changed)
 
     # ------------------------------------------------------------------
     # Expire existing records
@@ -115,11 +116,11 @@ def scd2_upsert_customer(dim_customer: pd.DataFrame,
     # ------------------------------------------------------------------
     inserts = merged.loc[is_new | is_changed, [
         "customer_id",
-        "email_stg",
+        # "email_stg",
         "country_stg",
         "signup_date_stg"
     ]].rename(columns={
-        "email_stg": "email",
+        # "email_stg": "email",
         "country_stg": "country",
         "signup_date_stg": "signup_date"
     })

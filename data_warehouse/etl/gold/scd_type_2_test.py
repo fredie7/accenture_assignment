@@ -11,7 +11,7 @@ customers_changed = customers_df.copy()
 customers_changed.loc[
     customers_changed["customer_id"] == 2386,
     "country"
-] = "SE"
+] = "FI"
 
 dim_customer = scd2_upsert_customer(dim_customer, customers_changed)
 print(dim_customer.sort_values(
@@ -30,7 +30,7 @@ print(cust_history)
 
 comparison = cust_history[[
     "customer_key",
-    "email",
+    # "email",
     "country",
     "effective_from",
     "effective_to",
@@ -43,10 +43,12 @@ old_row = cust_history[cust_history["is_current"] == False]
 new_row = cust_history[cust_history["is_current"] == True]
 
 print("🔴 OLD VERSION")
-print(old_row[["email", "country", "effective_to"]])
+print(old_row[["country", "effective_to"]])
+# print(old_row[["email", "country", "effective_to"]])
 
 print("\n🟢 NEW VERSION")
-print(new_row[["email", "country", "effective_from"]])
+print(new_row[["country", "effective_from"]])
+# print(new_row[["email", "country", "effective_from"]])
 
 assert old_row["country"].values[0] != new_row["country"].values[0], \
     "Country did not change"
