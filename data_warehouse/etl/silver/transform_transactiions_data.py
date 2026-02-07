@@ -132,7 +132,7 @@ def transform_transactions_data() -> pd.DataFrame:
     # --------------------------------------------------
     transactions_df["transaction_key"] = range(1, len(transactions_df) + 1)
     
-    
+        
     return transactions_df
 
 

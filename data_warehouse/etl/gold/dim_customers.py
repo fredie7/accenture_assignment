@@ -8,6 +8,7 @@ sys.path.append(str(Path(__file__).resolve().parent.parent / "silver"))
 # from transform_transactiions_data import transform_transactions_data
 from transform_customers_data import transform_customers_data
 
+# Load customers
 customers_df = transform_customers_data()
 
 # Create dimension table for customer
@@ -150,8 +151,19 @@ def scd2_upsert_customer(dim_customer: pd.DataFrame,
     ].isna().all(), "Current rows must have NULL effective_to"
     # -------------------------------------------
 
+    # Save dimension table to CSV
+ 
+
     return dim_customer
+
+# Output path for the dimension table
+output_path = (
+    Path(__file__).resolve().parent.parent.parent
+    / "processed_data"
+    / "dim_customers.csv"
+)
 dim_customer = scd2_upsert_customer(dim_customer, customers_df)
+dim_customer.to_csv(output_path, index=False)
 # print(dim_customer.sort_values(
 #     ["customer_id", "effective_from"]
 # ))
