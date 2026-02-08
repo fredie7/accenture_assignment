@@ -5,6 +5,12 @@
 This project is designed with an ultra focus on aligning business requirements and policy constraints with technical scalability.
 The objective covers the breadth of a unified analytics and intelligence system that supports customer behavior analysis, decision support, and conversational insights. The solution integrates data engineering, analytics, feature engineering, and AI-driven interfaces, delivered through a backend feature and an intuitive frontend inrerface.
 
+<div align="center">
+  <img src="https://github.com/fredie7/accenture_assignment/blob/main/project-images/system%20design.png?raw=true" />
+  <br>
+   <sub><b>Oroject Architecture</b></sub>
+</div>
+
 ### Technology Stack
 - Data & Backend: Python (Pandas, FastAPI)
 - Analytics & Feature Engineering: Statistical analysis, clustering (K-Means)
