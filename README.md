@@ -82,6 +82,7 @@ The AI solution was architected around a Retrieval-Augmented Generation (RAG) ap
 On top of the RAG layer, a multi-agent architecture was implemented. Each agent is specialized for a distinct responsibility, such as policy interpretation or customer analytics, and exposed as a tool within the system. It's built to connect with two knowledge sources:
 - The structured & cleaned business data stored in te ware house: where agentic tools connect with to perform their distinct functions, and
 - The unstructured policy document: which is compressed as embeddings in the Fiss dtbase.
+
 A supervisory agent, following a ReAct-style reasoning pattern, evaluates the user’s request, determines the appropriate action, and routes the query to the correct agent. This design improves the reliability, transparency, and explainability of responses.
 
 
