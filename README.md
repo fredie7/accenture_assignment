@@ -51,6 +51,7 @@ Fact & Dimension Design
   <br>
    <sub><b>Kimball-style star schema</b></sub>
 </div>
+
 #### Slowly Changing Dimension - Type 2
 The Customer dimension was modeled as a Slowly Changing Dimension Type 2, anticipating changes such as country or account attributes over time.
 This ensures:
