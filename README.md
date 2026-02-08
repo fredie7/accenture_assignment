@@ -136,6 +136,10 @@ With additional time, the first priority would be to strengthen data quality and
 
 On the analytics side, the customer behavior models could be enhanced by incorporating temporal features and supervised learning approaches for churn or fraud risk prediction, supported by proper model evaluation and monitoring.
 
+As business volume and data complexity grow, the solution is designed to scale naturally using Azure-native services and Databricks. The current architecture intentionally focuses on clarity and correctness, while remaining fully compatible with cloud-scale execution.
+
+On the data platform side, the ETL pipeline and star-schema model can be migrated to Azure Data Lake Storage and Databricks to support distributed processing, incremental loads, and large-scale analytics. This enables the platform to handle increased transaction volumes, more complex transformations, and advanced analytics use cases without redesign.
+
 For the AI system, improvements would include expanding the document corpus, implementing hybrid retrieval strategies, adding response confidence scoring, and introducing evaluation metrics for RAG accuracy and latency. Finally, the platform could be productionized further through CI/CD pipelines, enhanced observability, and role-based access controls to better reflect an enterprise consulting delivery.
 
 
