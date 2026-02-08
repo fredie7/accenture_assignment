@@ -77,11 +77,14 @@ Supports: How should marketing, pricing, and retention differ by segment?
 Value: Turns raw metrics into actionable customer personas.
 
 ### AI-Multi-Agentic Decision Support System
-The AI solution was architected around a Retrieval-Augmented Generation (RAG) approach, where policy documents and business rules are embedded and retrieved contextually at query time. This ensures that responses are rooted in approved policies and compliance constraints rather than free-form generation.
+The AI solution was architected around a Retrieval-Augmented Generation (RAG) approach, where policy compliance and business rules are embedded and retrieved contextually at query time. This ensures that responses are rooted in approved policies and compliance constraints.
 
-On top of the RAG layer, a multi-agent architecture was implemented. Each agent is specialized for a distinct responsibility, such as policy interpretation or customer analytics, and exposed as a tool within the system. A supervisory agent, following a ReAct-style reasoning pattern, evaluates the user’s request, determines the appropriate action, and routes the query to the correct agent. This design improves the reliability, transparency, and explainability of responses.
+On top of the RAG layer, a multi-agent architecture was implemented. Each agent is specialized for a distinct responsibility, such as policy interpretation or customer analytics, and exposed as a tool within the system. It's built to connect with two knowledge sources:
+- The structured & cleaned business data stored in te ware house: where agentic tools connect with to perform their distinct functions, and
+- The unstructured policy document: which is compressed as embeddings in the Fiss dtbase.
+A supervisory agent, following a ReAct-style reasoning pattern, evaluates the user’s request, determines the appropriate action, and routes the query to the correct agent. This design improves the reliability, transparency, and explainability of responses.
 
-The conversational AI connects directly to the analytics warehouse, enabling natural-language queries over both structured business data and unstructured policy documentation, while enforcing business rules in real time.
+
 
 <div align="center">
   <img src="https://github.com/fredie7/accenture_assignment/blob/main/project-images/ai-tool-calls.png?raw=true" />
