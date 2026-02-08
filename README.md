@@ -3,11 +3,11 @@
 ### Project Overview
 
 This project is designed with an ultra focus on aligning business requirements and policy constraints with technical scalability.
-The objective covers the breadth of a unified analytics and intelligence system that supports customer behavior analysis, decision support, and conversational insights. The solution integrates data engineering, analytics, machine learning, and AI-driven interfaces, delivered through a backend feature and an intuitive frontend inrerface.
+The objective covers the breadth of a unified analytics and intelligence system that supports customer behavior analysis, decision support, and conversational insights. The solution integrates data engineering, analytics, feature engineering, and AI-driven interfaces, delivered through a backend feature and an intuitive frontend inrerface.
 
 ### Technology Stack
 - Data & Backend: Python (Pandas, FastAPI)
-- Analytics & ML: Statistical analysis, clustering (K-Means)
+- Analytics & Feature Engineering: Statistical analysis, clustering (K-Means)
 - AI: LLMs, RAG, LangChain, LangGraph
 - Frontend: Next.js
 - Architecture: ETL pipelines, star schema modeling, multi-agent AI
