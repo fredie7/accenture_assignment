@@ -84,7 +84,7 @@ On top of the RAG layer, a multi-agent architecture was implemented. Each agent 
 The conversational AI connects directly to the analytics warehouse, enabling natural-language queries over both structured business data and unstructured policy documentation, while enforcing business rules in real time.
 
 <div align="center">
-  <img src="https://github.com/fredie7/accenture_assignment/blob/main/prooject-images/ai-tool-calls.png?raw=true" />
+  <img src="https://github.com/fredie7/accenture_assignment/blob/main/project-images/ai-tool-calls.png?raw=true" />
   <br>
    <sub><b>AI Tool Calls</b></sub>
 </div>
@@ -92,11 +92,11 @@ The conversational AI connects directly to the analytics warehouse, enabling nat
 <table align="center">
   <tr>
     <td align="center">
-      <img src="https://github.com/fredie7/accenture_assignment/blob/main/prooject-images/conversation_1.png?raw=true" height="300"><br>
+      <img src="https://github.com/fredie7/accenture_assignment/blob/main/project-images/conversation_1.png?raw=true" height="300"><br>
       <sub><b>CLient & AI Interaction</b> </sub>
     </td>
     <td align="center">
-      <img src="https://github.com/fredie7/accenture_assignment/blob/main/prooject-images/conversation_2.png?raw=true" height="300"><br>
+      <img src="https://github.com/fredie7/accenture_assignment/blob/main/project-images/conversation_2.png?raw=true" height="300"><br>
       <sub><b>CLient & AI Interaction</b> </sub>
     </td>
   </tr>
