@@ -198,7 +198,7 @@ def get_customer_profile(customer_id: int) -> str:
         f"- Total transactions: {len(rows)}\n"
         f"- Countries used: {rows.country.nunique()}"
     )
-
+# check here
 @tool
 def get_recent_transactions(customer_id: int, limit: int = 5) -> str:
     """
