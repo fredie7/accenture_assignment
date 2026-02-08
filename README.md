@@ -6,20 +6,20 @@ This project is designed with an ultra focus on aligning business requirements a
 The objective covers the breadth of a unified analytics and intelligence system that supports customer behavior analysis, decision support, and conversational insights. The solution integrates data engineering, analytics, machine learning, and AI-driven interfaces, delivered through a backend feature and an intuitive frontend inrerface.
 
 ### Technology Stack
-•	Data & Backend: Python (Pandas, FastAPI)
-•	Analytics & ML: Statistical analysis, clustering (K-Means)
-•	AI: LLMs, RAG, LangChain, LangGraph
-•	Frontend: Next.js
-•	Architecture: ETL pipelines, star schema modeling, multi-agent AI
+- Data & Backend: Python (Pandas, FastAPI)
+- Analytics & ML: Statistical analysis, clustering (K-Means)
+- AI: LLMs, RAG, LangChain, LangGraph
+- Frontend: Next.js
+- Architecture: ETL pipelines, star schema modeling, multi-agent AI
 
 ### Data Engineering & ETL Pipeline
 The project began with the design of an ETL pipeline, following standard data engineering best practices.
 
 #### Data Ingestion & Architecture
 Raw data was ingested into a data lake–style folder structure to preserve history and serve the medallion architecture:
-•	Bronze layer: source data ingestion
-•	Silver layer: Cleaned and standardized datasets with quality checks
-•	Gold layer: Business-ready fact and dimension tables optimized for analytics
+- Bronze layer: source data ingestion
+- Silver layer: Cleaned and standardized datasets with quality checks
+- Gold layer: Business-ready fact and dimension tables optimized for analytics
 This structure ensures traceability, scalability, and governance for downstream analytics and AI use cases.
 
 #### Data Cleaning & Quality Handling
@@ -37,14 +37,15 @@ In line with standard data governance practices, this issue was flagged and docu
 #### Data Modeling: Gold Layer
 Once the data was cleaned, it was transformed into a star schema to support analytics, reporting, and AI workloads.
 Fact & Dimension Design
-•	Fact table: Transactions (measures such as amount, exchange rate, time attributes)
-•	Dimension tables: Customers, Dates, Categories, Currencies
+- Fact table: Transactions (measures such as amount, exchange rate, time attributes)
+- Dimension tables: Customers, Dates, Categories, Currencies
+
 Slowly Changing Dimension (SCD Type 2)
 The Customer dimension was modeled as a Slowly Changing Dimension Type 2, anticipating changes such as country or account attributes over time.
 This ensures:
-•	historical accuracy,
-•	resilience to upstream changes,
-•	consistency in time-based analytics.
+- historical accuracy,
+- resilience to upstream changes,
+- consistency in time-based analytics.
 Final quality checks were performed across all fact and dimension tables before exposing the data for downstream consumption.
 ________________________________________
 ### Customer Transaction Frequency & Segmentation
