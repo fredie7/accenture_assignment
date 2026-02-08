@@ -49,7 +49,7 @@ This ensures:
 Final quality checks were performed across all fact and dimension tables before exposing the data for downstream consumption.
 
 ### Customer Transaction Frequency & Segmentation
-The above features has been Were Chosen to cover the following metrics and business questions:
+Before establishing a many-to-one relationship between the data that drove this line of work, the above features had been Chosen to cover the following metrics and business questions:
 
 #### Transaction Frequency
 Chosen to measure customer engagement and loyalty.
