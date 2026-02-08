@@ -46,6 +46,11 @@ Fact & Dimension Design
 - Fact table: Transactions (measures such as amount, exchange rate, time attributes)
 - Dimension tables: Customers, Dates, Categories, Currencies
 
+<div align="center">
+  <img src="https://github.com/fredie7/accenture_assignment/blob/main/project-images/model.png?raw=true" />
+  <br>
+   <sub><b>Kimball-style star schema</b></sub>
+</div>
 #### Slowly Changing Dimension - Type 2
 The Customer dimension was modeled as a Slowly Changing Dimension Type 2, anticipating changes such as country or account attributes over time.
 This ensures:
