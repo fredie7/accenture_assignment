@@ -103,3 +103,63 @@ The conversational AI connects directly to the analytics warehouse, enabling nat
 </table>
 
 To operationalize the system, a FastAPI backend was developed to serve as the interface between stakeholders and the AI services. All endpoints were tested for correctness, performance, and reliability. Finally, a Next.js frontend was built to allow non-technical stakeholders to interact with the system conversationally and generate accurate, business-ready insights without requiring technical expertise.
+
+
+#### Guidelines on how to run the project on your computer:
+
+First, please, ensure that you have python and node installed on your computer
+
+Then fork the repo
+Go into the project directory:
+cd accenture_assignment
+
+To do all intallations and run from an independent virtual environment(recommended):
+python -m venv venv
+
+Assess virtual environment:
+source venv\bin\activate (hit enter)
+
+Once you're in, install uv:
+pip install uv
+
+Install all the required dependences:
+uv pip install -r requirements.txt'
+
+To run the ETL:
+
+cd data_warehouse
+cd etl
+cd gold
+run each of the following to loaf or refresh the data:
+python dim_categories.py
+python dim_customers.py
+python dim_dates.py
+python dim_currencies.py
+python fact_transactions.py
+
+to run the AI:
+Return to the root of this project - accenture_assignment
+Then:
+cd AI
+cd app
+run:
+uvicorn main:app --reload
+
+Once it starts, you may want to interact with the front end:
+Split your terminal or cd into the project from another terminal
+Start from the project's root - accenture_assignment
+cd frontend
+cd app
+cd business-agent-ui
+
+To have access to alll supportive javascript packages:
+run: 
+npm install
+cd app (again)
+run:
+npm run dev
+Go to the browser:
+enter:
+http://localhost:3000/         (Make usre you don't have ny program running on this port in the mean tim)
+
+
