@@ -40,38 +40,38 @@ Fact & Dimension Design
 - Fact table: Transactions (measures such as amount, exchange rate, time attributes)
 - Dimension tables: Customers, Dates, Categories, Currencies
 
-Slowly Changing Dimension (SCD Type 2)
+#### Slowly Changing Dimension - Type 2
 The Customer dimension was modeled as a Slowly Changing Dimension Type 2, anticipating changes such as country or account attributes over time.
 This ensures:
 - historical accuracy,
 - resilience to upstream changes,
 - consistency in time-based analytics.
 Final quality checks were performed across all fact and dimension tables before exposing the data for downstream consumption.
-________________________________________
+
 ### Customer Transaction Frequency & Segmentation
 The above features has been Were Chosen to cover the following metrics and business questions:
 
-Transaction Frequency
+#### Transaction Frequency
 Chosen to measure customer engagement and loyalty.
 Supports: Who are our most engaged customers? Who is at churn risk?
 Value: Enables retention strategies and loyalty program design.
 
-Total Spend per Customer
+#### Total Spend per Customer
 Chosen as a proxy for customer lifetime value.
 Supports: Who drives most of the revenue? Where should VIP efforts focus?
 Value: Guides revenue concentration analysis and premium customer treatment.
 
-Average Transaction Amount
+#### Average Transaction Amount
 Chosen to capture purchasing behavior, not just total value.
 Supports: Do customers prefer small frequent purchases or large baskets?
 Value: Informs pricing, bundling, and discount strategies.
 
-Category Preference
+#### Category Preference
 Chosen to understand what customers actually buy.
 Supports: Which products drive loyalty and repeat purchases?
 Value: Enables personalized marketing and cross-sell opportunities.
 
-Customer Segmentation
+#### Customer Segmentation
 Chosen to group customers by behavior instead of treating everyone the same.
 Supports: How should marketing, pricing, and retention differ by segment?
 Value: Turns raw metrics into actionable customer personas.
