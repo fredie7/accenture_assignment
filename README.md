@@ -83,6 +83,8 @@ On top of the RAG layer, a multi-agent architecture was implemented. Each agent 
 - The structured & cleaned business data stored in te ware house: where agentic tools connect with to perform their distinct functions, and
 - The unstructured policy document: which is compressed as embeddings in the Fiss dtbase.
 
+Every step of the way the RAG was tested on its bility to address polivy lookups as predefined. this came with concurrent testing of the vector database and the retrieval chain. Yhe agentic tools which queried the data in the warehouse were lso tested for issues of column definition mismatches.
+
 A supervisory agent, following a ReAct-style reasoning pattern, evaluates the user’s request, determines the appropriate action, and routes the query to the correct agent. This design improves the reliability, transparency, and explainability of responses.
 
 
