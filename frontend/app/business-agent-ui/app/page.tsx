@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import ReactMarkdown from "react-markdown";
+
 
 type Message = {
   role: "user" | "agent";
@@ -79,7 +81,20 @@ export default function Home() {
                   : "mr-auto bg-slate-800 text-slate-200"
               }`}
             >
-              {msg.content}
+            <div
+              key={i}
+              className={`max-w-[80%] px-4 py-3 rounded-2xl ${
+                msg.role === "user"
+                  ? "ml-auto bg-emerald-400 text-black"
+                  : "mr-auto bg-slate-800 text-slate-200"
+              }`}
+            >
+              <div className="prose prose-invert max-w-none text-sm leading-relaxed">
+                <ReactMarkdown>{msg.content}</ReactMarkdown>
+              </div>
+            </div>
+
+
             </div>
           ))}
 
