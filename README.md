@@ -104,6 +104,24 @@ The conversational AI connects directly to the analytics warehouse, enabling nat
 
 To operationalize the system, a FastAPI backend was developed to serve as the interface between stakeholders and the AI services. All endpoints were tested for correctness, performance, and reliability. Finally, a Next.js frontend was built to allow non-technical stakeholders to interact with the system conversationally and generate accurate, business-ready insights without requiring technical expertise.
 
+#### Key Assumptions and Trade-offs
+
+Several pragmatic assumptions were made to balance realism, scope, and delivery quality within the constraints of the assignment. It was assumed that the provided datasets represent a reliable snapshot of customer and transaction behavior, and that missing or inconsistent values could be addressed using standard data engineering best practices without materially distorting business outcomes. For example, missing currency values were imputed using EUR as a base currency, based on domain context of Nordic markets, while preserving lineage for auditability. Also the eamil feature was compltely dropped since it wouldn't account for any business usecase.
+
+From a modeling perspective, a Kimball-style star schema was selected to optimize analytical clarity and downstream BI and AI use cases. While this approach favors simplicity and query performance, it trades off some normalization and flexibility that might be preferred in highly operational or rapidly changing domains. Similarly, customer segmentation was implemented using an unsupervised K-Means model to emphasize interpretability and speed over model complexity, acknowledging that more advanced models could yield incremental gains at the cost of explainability.
+
+For the AI component, the focus was placed on architecture and integration rather than prompt optimization or model fine-tuning. The RAG pipeline uses a limited policy corpus and a single vector store, which is sufficient for demonstrating compliance-aware reasoning but does not yet reflect enterprise-scale document volumes or retrieval strategies.
+
+#### What I Would Improve with More Time
+
+With additional time, the first priority would be to strengthen data quality and governance by introducing automated data validation frameworks (e.g., schema enforcement and anomaly detection) and more robust Slowly Changing Dimension handling for customer attributes.
+
+On the analytics side, the customer behavior models could be enhanced by incorporating temporal features and supervised learning approaches for churn or fraud risk prediction, supported by proper model evaluation and monitoring.
+
+For the AI system, improvements would include expanding the document corpus, implementing hybrid retrieval strategies, adding response confidence scoring, and introducing evaluation metrics for RAG accuracy and latency. Finally, the platform could be productionized further through CI/CD pipelines, enhanced observability, and role-based access controls to better reflect an enterprise consulting delivery.
+
+
+
 
 #### Guidelines on how to run the project on your computer:
 
