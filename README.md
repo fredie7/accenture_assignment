@@ -1,4 +1,4 @@
-## Full-stach Data & AI System For Swift Analytics
+## Full-stack Data & AI System For Swift, Precise Analytics
 
 ### Project Overview
 
