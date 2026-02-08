@@ -125,6 +125,7 @@ business_data = (
             "customer_key_y": "customer_key"
         })
 )
+print(business_data["transaction_id"].value_counts())
 
 # -------------------------
 # Policy documents (UNSTRUCTURED DATA)
@@ -182,14 +183,15 @@ retriever = RetrievalQA.from_chain_type(
 
 # Build tools
 
+
 @tool
 def get_transaction_field(transaction_id: int, field: str) -> str:
     """
     Get a specific field for a transaction.
-    Allowed fields:
-    transaction_id, customer_id, amount, currency, timestamp, category,
-    currency_imputed, exchange_rate, transaction_amount_eur, country, signup_date,
-    email, days_since_signup
+    Valid fields:
+    transaction_id, customer_id, transaction_amount_eur,
+    base_currency, transaction_currency, transaction_timestamp,
+    category, country, signup_date, is_high_value_transaction
     """
     if field not in business_data.columns:
         return f"Invalid field. Available fields are: {list(business_data.columns)}"
@@ -211,8 +213,13 @@ def get_customer_transactions(customer_id: int) -> str:
         return "No transactions found for this customer."
 
     summary = rows[[
-        "transaction_id", "transaction_transaction_amount_eur", "base_currency", "country", "category"
-    ]].head(5)
+    "transaction_id",
+    "transaction_amount_eur",
+    "base_currency",
+    "country",
+    "category"
+    ]]
+
 
     return summary.to_string(index=False)
 
@@ -247,7 +254,7 @@ def get_transaction_summary(transaction_id: int) -> str:
     return (
         f"Transaction {r.transaction_id}:\n"
         f"- Customer ID: {r.customer_id}\n"
-        f"- Amount: {r.transaction_transaction_amount_eur} {r.base_currency}\n"
+        f"- Amount: {r.transaction_amount_eur} {r.base_currency}\n"
         f"- Category: {r.category}\n"
         f"- Country: {r.country}\n"
         f"- Date: {r.transaction_timestamp}\n"
@@ -340,15 +347,15 @@ def get_recent_transactions(customer_id: int, limit: int = 5) -> str:
     if rows.empty:
         return "No transactions found."
 
-    rows = rows.sort_values("timestamp", ascending=False).head(limit)
+    rows = rows.sort_values("transaction_timestamp", ascending=False).head(limit)
 
     return rows[[
         "transaction_id",
-        "transaction_transaction_amount_eur",
+        "transaction_amount_eur",
         "base_currency",
         "country",
         "category",
-        "timestamp",
+        "transaction_timestamp",
     ]].to_string(index=False)
 
 def get_customer_profile(customer_id: int) -> str:
