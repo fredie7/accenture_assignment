@@ -42,11 +42,11 @@ print(comparison)
 old_row = cust_history[cust_history["is_current"] == False]
 new_row = cust_history[cust_history["is_current"] == True]
 
-print("🔴 OLD VERSION")
+print("==>> OLD VERSION")
 print(old_row[["country", "effective_to"]])
 # print(old_row[["email", "country", "effective_to"]])
 
-print("\n🟢 NEW VERSION")
+print("\n==>> NEW VERSION")
 print(new_row[["country", "effective_from"]])
 # print(new_row[["email", "country", "effective_from"]])
 
@@ -56,7 +56,7 @@ assert old_row["country"].values[0] != new_row["country"].values[0], \
 assert old_row["effective_to"].values[0] == new_row["effective_from"].values[0], \
     "Timeline break detected"
 
-print("✅ Change tracked and verified for customer_id =", CHANGED_CUSTOMER_ID)
+print("Change tracked and verified for customer_id =", CHANGED_CUSTOMER_ID)
 
 changed_today = dim_customer[
     dim_customer["effective_from"] == pd.Timestamp.today().normalize()
