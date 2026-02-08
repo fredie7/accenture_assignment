@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
-
 
 type Message = {
   role: "user" | "agent";
@@ -14,6 +13,8 @@ export default function Home() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const bottomRef = useRef<HTMLDivElement | null>(null);
+
   const API_URL = "http://localhost:8000/chat";
 
   useEffect(() => {
@@ -21,6 +22,11 @@ export default function Home() {
       localStorage.setItem("session_id", "");
     }
   }, []);
+
+  /** ✅ Auto-scroll when messages update */
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, loading]);
 
   const sendMessage = async () => {
     if (!input.trim()) return;
@@ -72,35 +78,39 @@ export default function Home() {
 
         {/* Chat */}
         <div className="flex-1 overflow-y-auto p-6 space-y-4">
+
+          {/* ✅ Welcome message */}
+          {messages.length === 0 && !loading && (
+            <div className="h-full flex items-center justify-center text-center">
+              <p className="text-slate-400 text-lg italic">
+                What business insight may I help you with today?
+              </p>
+            </div>
+          )}
+
           {messages.map((msg, i) => (
             <div
               key={i}
               className={`max-w-[80%] px-4 py-3 rounded-2xl text-sm leading-relaxed ${
                 msg.role === "user"
-                  ? "ml-auto bg-emerald-500 text-black"
-                  : "mr-auto bg-slate-800 text-slate-200"
-              }`}
-            >
-            <div
-              key={i}
-              className={`max-w-[80%] px-4 py-3 rounded-2xl ${
-                msg.role === "user"
                   ? "ml-auto bg-emerald-400 text-black"
                   : "mr-auto bg-slate-800 text-slate-200"
               }`}
             >
-              <div className="prose prose-invert max-w-none text-sm leading-relaxed">
+              <div className="prose prose-invert max-w-none">
                 <ReactMarkdown>{msg.content}</ReactMarkdown>
               </div>
-            </div>
-
-
             </div>
           ))}
 
           {loading && (
-            <div className="text-slate-500 text-sm">Agent is thinking…</div>
+            <div className="text-slate-500 text-sm">
+              Agent is thinking…
+            </div>
           )}
+
+          {/* ✅ Scroll anchor */}
+          <div ref={bottomRef} />
         </div>
 
         {/* Input */}
