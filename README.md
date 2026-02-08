@@ -83,4 +83,23 @@ On top of the RAG layer, a multi-agent architecture was implemented. Each agent 
 
 The conversational AI connects directly to the analytics warehouse, enabling natural-language queries over both structured business data and unstructured policy documentation, while enforcing business rules in real time.
 
+<div align="center">
+  <img src="https://github.com/fredie7/accenture_assignment/blob/main/prooject-images/ai-tool-calls.png?raw=true" />
+  <br>
+   <sub><b>AI Tool Calls</b></sub>
+</div>
+
+<table align="center">
+  <tr>
+    <td align="center">
+      <img src="https://github.com/fredie7/accenture_assignment/blob/main/prooject-images/conversation_1.png?raw=true" height="300"><br>
+      <sub><b>CLient & AI Interaction</b> </sub>
+    </td>
+    <td align="center">
+      <img src="https://github.com/fredie7/accenture_assignment/blob/main/prooject-images/conversation_2.png?raw=true" height="300"><br>
+      <sub><b>CLient & AI Interaction</b> </sub>
+    </td>
+  </tr>
+</table>
+
 To operationalize the system, a FastAPI backend was developed to serve as the interface between stakeholders and the AI services. All endpoints were tested for correctness, performance, and reliability. Finally, a Next.js frontend was built to allow non-technical stakeholders to interact with the system conversationally and generate accurate, business-ready insights without requiring technical expertise.
