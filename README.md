@@ -149,59 +149,58 @@ For the AI system, improvements would include expanding the document corpus, imp
 
 First, please, ensure that you have python and node installed on your computer
 
-Then fork the repo
-Go into the project directory:
-cd accenture_assignment
+- Then fork the repo
+- Go into the project directory:
+- cd accenture_assignment
 
 To do all intallations and run from an independent virtual environment(recommended):
-python -m venv venv
+- python -m venv venv
 
 Assess virtual environment:
-source venv\bin\activate (hit enter)
+- source venv\bin\activate (hit enter)
 
 Once you're in, install uv:
-pip install uv
+- pip install uv
 
-Install all the required dependences:
-uv pip install -r requirements.txt'
+- Install all the required dependences:
+- uv pip install -r requirements.txt'
 
 To run the ETL:
 
-cd data_warehouse
-cd etl
-cd gold
+- cd data_warehouse
+- cd etl
+- cd gold
 run each of the following to loaf or refresh the data:
-python dim_categories.py
-python dim_customers.py
-python dim_dates.py
-python dim_currencies.py
-python fact_transactions.py
+- python dim_categories.py
+- python dim_customers.py
+- python dim_dates.py
+- python dim_currencies.py
+- python fact_transactions.py
 
-to run the AI:
+- to run the AI:
 Return to the root of this project - accenture_assignment
-Then:
-cd AI
-cd app
-run:
-uvicorn main:app --reload
+- Then:
+- cd AI
+- cd app
+- run:
+- uvicorn main:app --reload
 
 Once it starts, you may want to interact with the front end:
-Split your terminal or cd into the project from another terminal
-Start from the project's root - accenture_assignment
-cd frontend
-cd app
-cd business-agent-ui
+- Split your terminal or cd into the project from another terminal
+- Start from the project's root - accenture_assignment
+- cd frontend
+- cd app
+- cd business-agent-ui
 
-To have access to alll supportive javascript packages:
-run: 
-npm install
-npm install remark-gfm
-npm install react-markdown
-cd app (again)
+To have access to alll supportive javascript packages, run: 
+- npm install
+- npm install remark-gfm
+- npm install react-markdown
+- cd app (again)
 run:
-npm run dev
-Go to the browser:
+- npm run dev
+- Go to the browser:
 enter:
-http://localhost:3000/         (Make usre you don't have ny program running on this port in the mean tim)
+- http://localhost:3000/         (Make usre you don't have any program running on this port in the mean tim)
 
 
