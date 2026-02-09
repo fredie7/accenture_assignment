@@ -23,7 +23,7 @@ export default function Home() {
     }
   }, []);
 
-  /** ✅ Auto-scroll when messages update */
+  /**  Auto-scroll when messages update */
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
@@ -79,7 +79,7 @@ export default function Home() {
         {/* Chat */}
         <div className="flex-1 overflow-y-auto p-6 space-y-4">
 
-          {/* ✅ Welcome message */}
+          {/*  Welcome message */}
           {messages.length === 0 && !loading && (
             <div className="h-full flex items-center justify-center text-center">
               <p className="text-slate-400 text-lg italic">
@@ -109,7 +109,7 @@ export default function Home() {
             </div>
           )}
 
-          {/* ✅ Scroll anchor */}
+          {/*  Scroll anchor */}
           <div ref={bottomRef} />
         </div>
 
