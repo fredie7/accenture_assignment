@@ -36,7 +36,7 @@ Missing values were first replicated into a separate column (currency_imputed) f
 #### Duplicate Transactions
 Approximately 2,000 duplicate transaction_ids were identified. These were investigated using timestamps, transaction amounts, and customer IDs to detect potential late-arriving data or pipeline retries.
 Since no consistent pattern justified retaining duplicates, they were safely removed to preserve transactional integrity.
-Data Quality Alert
+#### Data Quality Alert
 An anomaly was detected where all customer emails appeared identical.
 In line with standard data governance practices, this issue was flagged and documented for review as it may indicate upstream masking errors.
 
@@ -61,7 +61,7 @@ This ensures:
 Final quality checks were performed across all fact and dimension tables before exposing the data for downstream consumption.
 
 ### Customer Level Insights & Segmentation
-Before establishing a many-to-one relationship between the data that drove this line of work, the above features had been Chosen to unravel customer level insights and and customer behaviour through the following metrics and business questions:
+Before establishing a many-to-one relationship between the data that drove this line of work, the above features had been chosen to unravel customer level insights and customer behaviour through the following metrics and business questions:
 
 #### Transaction Frequency
 Chosen to measure customer engagement and loyalty.
