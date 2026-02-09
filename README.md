@@ -60,12 +60,12 @@ This ensures:
 - consistency in time-based analytics.
 Final quality checks were performed across all fact and dimension tables before exposing the data for downstream consumption.
 
-### Customer Transaction Frequency & Segmentation
-Before establishing a many-to-one relationship between the data that drove this line of work, the above features had been Chosen to cover the following metrics and business questions:
+### Customer Level Insights & Segmentation
+Before establishing a many-to-one relationship between the data that drove this line of work, the above features had been Chosen to unravel customer level insights and and customer behaviour through the following metrics and business questions:
 
 #### Transaction Frequency
 Chosen to measure customer engagement and loyalty.
-Supports: Who are our most engaged customers? Who is at churn risk?
+Supports: Who are our most engaged customers?
 Value: Enables retention strategies and loyalty program design.
 
 #### Total Spend per Customer
@@ -76,7 +76,7 @@ Value: Guides revenue concentration analysis and premium customer treatment.
 #### Average Transaction Amount
 Chosen to capture purchasing behavior, not just total value.
 Supports: Do customers prefer small frequent purchases or large baskets?
-Value: Informs pricing, bundling, and discount strategies.
+Value: Informs pricing and discount strategies.
 
 #### Category Preference
 Chosen to understand what customers actually buy.
@@ -86,7 +86,7 @@ Value: Enables personalized marketing and cross-sell opportunities.
 #### Customer Segmentation
 Chosen to group customers by behavior instead of treating everyone the same.
 Supports: How should marketing, pricing, and retention differ by segment?
-Value: Turns raw metrics into actionable customer personas.
+Value: Turns raw metrics into insightful customer personas.
 
 ### AI-Multi-Agentic Decision Support System
 The AI solution was architected around a Retrieval-Augmented Generation (RAG) approach, where policy compliance and business rules are embedded and retrieved contextually at query time. This ensures that responses are rooted in approved policies and compliance constraints.
