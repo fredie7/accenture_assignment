@@ -8,7 +8,7 @@ from api.chat import router as chat_router
 
 app = FastAPI(title="Business Consulting Agent API")
 
-# Allow frontend access (adjust in production)
+# Allow frontend access
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
