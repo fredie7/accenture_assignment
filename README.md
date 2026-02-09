@@ -195,6 +195,8 @@ cd business-agent-ui
 To have access to alll supportive javascript packages:
 run: 
 npm install
+npm install remark-gfm
+npm install react-markdown
 cd app (again)
 run:
 npm run dev
