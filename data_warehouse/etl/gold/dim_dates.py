@@ -5,6 +5,7 @@ import pandas as pd
 
 # Add parent directory to sys.path at module level
 sys.path.append(str(Path(__file__).resolve().parent.parent / "silver"))
+from transform_transactiions_data import transform_transactions_data
 
 
 # Output path for the dimension table
@@ -76,7 +77,6 @@ def build_dim_date(transform_transactions_fn):
 
 
 # Usage
-from transform_transactiions_data import transform_transactions_data
 
 dim_date = build_dim_date(transform_transactions_data)
 print(dim_date.head())
