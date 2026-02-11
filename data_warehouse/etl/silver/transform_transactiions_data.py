@@ -5,18 +5,26 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parent.parent / "bronze"))
 sys.path.append(str(Path(__file__).resolve().parent.parent.parent / ""))
 
+
 import logging
+
+# Set up logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
 import pandas as pd
 
 from extract_data import extract_data
+
 from utils.helper_functions import (
     standardize_columns,
     EXCHANGE_RATES,
     DuplicateDataError,
 )
 
+
 logger = logging.getLogger(__name__)
-# logging.basicConfig(level=logging.INFO)
 
 
 def transform_transactions_data() -> pd.DataFrame:
@@ -57,7 +65,7 @@ def transform_transactions_data() -> pd.DataFrame:
     duplicate_count = transactions_df.duplicated("transaction_id").sum()
 
     if duplicate_count > 0:
-        # logger.warning(f"Found {duplicate_count} duplicate transaction_id records")
+        logger.warning(f"Found {duplicate_count} duplicate transaction_id records")
 
         dup_df = transactions_df[transactions_df.duplicated("transaction_id", keep=False)]
 
@@ -99,7 +107,10 @@ def transform_transactions_data() -> pd.DataFrame:
     transactions_df = transactions_df.dropna(subset=["customer_id"])
 
     logger.info("Imputing missing currency values...")
+    # Create a flag to indicate which records had missing currency values before imputation
     transactions_df["currency_imputed"] = transactions_df["currency"].isna()
+    
+    # Fill missing currency values with "EUR" and standardize the format
     transactions_df["currency"] = (
         transactions_df["currency"]
         .fillna("EUR")
@@ -107,7 +118,7 @@ def transform_transactions_data() -> pd.DataFrame:
         .str.upper()
     )
 
-    logger.info("Imputing missing category values...")
+    logger.info("Imputing missing category values to preserve transaction completeness...")
     transactions_df["category"] = transactions_df["category"].fillna("unknown")
 
     # --------------------------------------------------
@@ -116,11 +127,12 @@ def transform_transactions_data() -> pd.DataFrame:
     logger.info("Mapping exchange rates...")
     transactions_df["exchange_rate"] = transactions_df["currency"].map(EXCHANGE_RATES)
 
-    logger.info("Calculating amount_eur...")
+    logger.info("Calculating amount in euros...")
     transactions_df["amount_eur"] = (
         transactions_df["amount"] * transactions_df["exchange_rate"]
     ).round(2)
 
+    # Quality check to ensure no null values remain in critical columns after transformations
     null_summary = transactions_df.isnull().sum()
     logger.info(f"Final null value summary:\n{null_summary}")
 
@@ -136,9 +148,21 @@ def transform_transactions_data() -> pd.DataFrame:
         "currency": "transaction_currency",
         "timestamp": "transaction_timestamp",
     })
-    transactions_df["date"] = transactions_df["transaction_timestamp"].dt.date
+    # transactions_df["date"] = transactions_df["transaction_timestamp"].dt.normalize()
+    # transactions_df["date"] = transactions_df["transaction_timestamp"].dt.date
 
-    print(transactions_df.columns)    
+    # Create a new 'date' column by extracting the date component from the transaction_timestamp
+    transactions_df["transaction_timestamp"] = pd.to_datetime(
+        transactions_df["transaction_timestamp"],
+        errors="coerce"
+    )
+
+    # Create a new 'date' column by flooring the transaction_timestamp to the nearest day
+    transactions_df["date"] = transactions_df["transaction_timestamp"].dt.floor("D")
+
+
+    print(transactions_df.columns)   
+    print(transactions_df.head()) 
     return transactions_df
 
 

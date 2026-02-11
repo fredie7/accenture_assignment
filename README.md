@@ -35,7 +35,7 @@ Missing values were first replicated into a separate column (currency_imputed) f
 
 #### Duplicate Transactions
 Approximately 2,000 duplicate transaction_ids were identified. These were investigated using timestamps, transaction amounts, and customer IDs to detect potential late-arriving data or pipeline retries.
-Since no consistent pattern justified retaining duplicates, they were safely removed to preserve transactional integrity.
+The latest occurence of timestamp for the duplicate transaction_id's were retained to preserve transactional integrity, while the remaining duplicate transacion_id's were dropped. Transactions having no customer_id's were dropped since keeping them defets the purpose of customer analytics, plus they constitute  minority of the wholr breadth of transactions.
 #### Data Quality Alert
 An anomaly was detected where all customer emails appeared identical.
 In line with standard data governance practices, this issue was flagged and documented for review as it may indicate upstream masking errors.
