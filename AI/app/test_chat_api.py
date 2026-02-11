@@ -4,7 +4,7 @@ import requests
 BASE_URL = "http://127.0.0.1:8000"
 
 def test_chat_api():
-    # Example payload
+
     payload = {
         "message": "Hello, I need business advice.",
         "session_id": None 
