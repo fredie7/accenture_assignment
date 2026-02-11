@@ -201,6 +201,6 @@ run:
 - npm run dev
 - Go to the browser:
 enter:
-- http://localhost:3000/         (Make usre you don't have any program running on this port in the mean tim)
+- http://localhost:3000/         (Ensure that you do not have any program running on this port in the mean tim)
 
 
