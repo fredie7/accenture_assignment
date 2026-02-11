@@ -5,22 +5,10 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parent.parent / "bronze"))
 sys.path.append(str(Path(__file__).resolve().parent.parent.parent / ""))
 
-import logging
-
-# Set up logging
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
-
 import pandas as pd
 
 from extract_data import extract_data
-from utils.helper_functions import standardize_columns, DuplicateDataError
-
-
-logger = logging.getLogger(__name__)
-# logging.basicConfig(level=logging.INFO)
+from utils.helper_functions import standardize_columns, DuplicateDataError, logger
 
 
 def transform_customers_data() -> pd.DataFrame:

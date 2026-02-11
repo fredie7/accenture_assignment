@@ -5,8 +5,11 @@ import pandas as pd
 
 # Add parent directory to sys.path at module level
 sys.path.append(str(Path(__file__).resolve().parent.parent / "silver"))
+sys.path.append(str(Path(__file__).resolve().parent.parent.parent / ""))
+
 from transform_transactiions_data import transform_transactions_data
 
+from utils.helper_functions import logger
 
 # Output path for the dimension table
 output_path = (
@@ -19,7 +22,10 @@ output_path = (
 def build_dim_category(transform_transactions_fn):
     # Prepare transactions
     transactions_df = transform_transactions_fn()
+    
+    logger.info(f"Transformed transactions data shape: {transactions_df.shape}")
     if transactions_df.empty:
+        logger.warning("No transactions data available to build dim_category.")
         return pd.DataFrame(
             columns=[
                 "category_key",
@@ -81,6 +87,7 @@ def build_dim_category(transform_transactions_fn):
 
 # Usage & Quality checks
 
+logger.info("Building dim_category dimension table...")
 dim_category = build_dim_category(transform_transactions_data)
 print(dim_category.head())
 print(len(dim_category))
