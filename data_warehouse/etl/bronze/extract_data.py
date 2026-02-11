@@ -9,6 +9,7 @@ import pandas as pd
 import numpy as np
 import logging
 from sklearn.preprocessing import StandardScaler
+import datetime as datetime
 
 # Define directory containing csv files
 DATA_DIR = "../../raw_data"
@@ -23,7 +24,12 @@ def extract_data():
     # Load CSV files
     customers = pd.read_csv(os.path.join(DATA_DIR, "customers.csv"))
     transactions = pd.read_csv(os.path.join(DATA_DIR, "transactions.csv"))
-    
+
+      # Add created_at to both DataFrames
+    now = datetime.datetime.now()
+    customers["created_at"] = now
+    transactions["created_at"] = now
+    print(transactions.info())
     # Log the shape of the loaded data
     logger.info(f"=====Loaded {len(customers)} customers and {len(transactions)} transactions=====")
     # Return the loaded data
