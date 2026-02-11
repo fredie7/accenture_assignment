@@ -6,13 +6,17 @@
 
 import os
 import pandas as pd
-import numpy as np
 import logging
-from sklearn.preprocessing import StandardScaler
 import datetime as datetime
 
 # Define directory containing csv files
 DATA_DIR = "../../raw_data"
+
+# Set up logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
 
 logger = logging.getLogger(__name__)
 
@@ -25,11 +29,11 @@ def extract_data():
     customers = pd.read_csv(os.path.join(DATA_DIR, "customers.csv"))
     transactions = pd.read_csv(os.path.join(DATA_DIR, "transactions.csv"))
 
-      # Add created_at to both DataFrames
+    # Add created_at to both DataFrames to presrve the timestamp of when the data was loaded into the data warehouse
     now = datetime.datetime.now()
     customers["created_at"] = now
     transactions["created_at"] = now
-    print(transactions.info())
+
     # Log the shape of the loaded data
     logger.info(f"=====Loaded {len(customers)} customers and {len(transactions)} transactions=====")
     # Return the loaded data

@@ -6,7 +6,12 @@ sys.path.append(str(Path(__file__).resolve().parent.parent / "bronze"))
 sys.path.append(str(Path(__file__).resolve().parent.parent.parent / ""))
 
 import logging
-from typing import Tuple
+
+# Set up logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
 
 import pandas as pd
 
@@ -42,18 +47,26 @@ def transform_customers_data() -> pd.DataFrame:
     null_counts = customers_df.isnull().sum()
     logger.info(f"Null value summary:\n{null_counts}")
 
+    duplicate_customers = customers_df.duplicated(subset=["customer_id"]).sum()
+    logger.info(f"Found {duplicate_customers} duplicate customer_id values before deduplication.")
+    
+    # Preventive measure: If there are duplicate customer_id values, log the details and raise an exception
     logger.info("Removing duplicate customer records...")
     customers_df = (
         customers_df
+        # Sort by signup_date to ensure the most recent record is kept when dropping duplicates
         .sort_values("signup_date")
+        # Keep the last occurrence of each customer_id (the most recent signup_date)
         .drop_duplicates(subset=["customer_id"], keep="last")
+        # Reset index after dropping duplicates
         .reset_index(drop=True)
     )
 
+    # Quality check to ensure no duplicate customer_id values remain after deduplication
     duplicate_count = customers_df.duplicated(subset=["customer_id"]).sum()
     if duplicate_count > 0:
         raise DuplicateDataError(
-            f"Duplicate customer_id values found after deduplication: {duplicate_count}"
+            logger.error(f"Duplicate customer_id values found after deduplication: {duplicate_count}")
         )
    
     logger.info("Customer data transformation completed successfully.")
