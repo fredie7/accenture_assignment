@@ -139,16 +139,16 @@ def transform_transactions_data() -> pd.DataFrame:
         "timestamp": "transaction_timestamp",
     })
     # transactions_df["date"] = transactions_df["transaction_timestamp"].dt.normalize()
-    # transactions_df["date"] = transactions_df["transaction_timestamp"].dt.date
+    transactions_df["date"] = transactions_df["transaction_timestamp"].dt.date
 
     # Create a new 'date' column by extracting the date component from the transaction_timestamp
-    transactions_df["transaction_timestamp"] = pd.to_datetime(
-        transactions_df["transaction_timestamp"],
-        errors="coerce"
-    )
+    # transactions_df["transaction_timestamp"] = pd.to_datetime(
+    #     transactions_df["transaction_timestamp"],
+    #     errors="coerce"
+    # )
 
-    # Create a new 'date' column by flooring the transaction_timestamp to the nearest day
-    transactions_df["date"] = transactions_df["transaction_timestamp"].dt.floor("D")
+    # # Create a new 'date' column by flooring the transaction_timestamp to the nearest day
+    # transactions_df["date"] = transactions_df["transaction_timestamp"].dt.floor("D")
 
 
     print(transactions_df.columns)   

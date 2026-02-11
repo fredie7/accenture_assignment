@@ -2,15 +2,15 @@ import sys
 from pathlib import Path
 import pandas as pd
 
-
 # Add parent directory to sys.path
 sys.path.append(str(Path(__file__).resolve().parent.parent / "silver"))
-
+sys.path.append(str(Path(__file__).resolve().parent.parent.parent / ""))
 
 # Load transformation functions at module level
 from transform_transactiions_data import transform_transactions_data
 from transform_customers_data import transform_customers_data
 
+from utils.helper_functions import logger
 
 # Define output path at module level
 output_path = (
@@ -18,6 +18,7 @@ output_path = (
     / "processed_data"
     / "fact_transactions.csv"
 )
+
 
 
 def build_fact_transactions(
@@ -78,12 +79,6 @@ def build_fact_transactions(
             how="left",
             validate="many_to_one",
        )
-        # .merge(
-        #     dim_date[["date", "date_key"]],
-        #     left_on=transactions_df["transaction_date"],
-        #     right_on=dim_date["date"],
-        #     how="left",
-        # )
     )
 
     # Final fact table
@@ -105,6 +100,8 @@ def build_fact_transactions(
     output_path.parent.mkdir(parents=True, exist_ok=True)
     fact_transactions.to_csv(output_path, index=False)
 
+
+    logger.info(f"Fact table 'fact_transactions' built successfully with shape {fact_transactions.shape} and saved to {output_path}.")
     return fact_transactions
 
 
@@ -114,6 +111,6 @@ fact_transactions = build_fact_transactions(
     transform_customers_data,
     output_path,
 )
-print(fact_transactions.head())
-print(fact_transactions.columns.tolist())
-print(len(fact_transactions))
+# print(fact_transactions.head())
+# print(fact_transactions.columns.tolist())
+# print(len(fact_transactions))

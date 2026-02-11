@@ -7,6 +7,7 @@ from langchain.chains import RetrievalQA
 from core.config import OPENAI_API_KEY
 from rag.vectorstore import build_vectorstore
 
+
 def build_policy_retriever():
     # LLM used for answering policy questions
     llm = ChatOpenAI(
@@ -18,9 +19,15 @@ def build_policy_retriever():
     # Vector search backend
     vectorstore = build_vectorstore()
 
+    # Configure retriever explicitly
+    retriever = vectorstore.as_retriever(
+        search_type="similarity",  # or "mmr"
+        search_kwargs={"k": 3}
+    )
+
     # Retrieval-based QA chain
     return RetrievalQA.from_chain_type(
         llm=llm,
         chain_type="stuff",
-        retriever=vectorstore.as_retriever()
+        retriever=retriever
     )

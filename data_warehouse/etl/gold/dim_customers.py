@@ -4,6 +4,9 @@ import pandas as pd
 
 # Add parent directory to sys.path
 sys.path.append(str(Path(__file__).resolve().parent.parent / "silver"))
+sys.path.append(str(Path(__file__).resolve().parent.parent.parent / ""))
+
+from utils.helper_functions import logger
 
 from transform_customers_data import transform_customers_data
 
@@ -66,9 +69,11 @@ def scd2_upsert_customer(
 
         # Tests
         assert result["customer_key"].is_unique
+        # Since this is the initial load, all records should be current and have no effective_to date
         assert result["is_current"].all()
         assert result["effective_to"].isna().all()
 
+        logger.info("Initial load completed successfully.")
         return result
 
     # ------------------------------------------------------------------
@@ -124,6 +129,7 @@ def scd2_upsert_customer(
     if inserts.empty:
         return dim_customer
 
+    logger.info(f"Inserting {len(inserts)} new/changed records into dim_customer...")
     next_key = dim_customer["customer_key"].max() + 1
 
     inserts["customer_key"] = range(next_key, next_key + len(inserts))
@@ -142,6 +148,7 @@ def scd2_upsert_customer(
         dim_customer["is_current"], "effective_to"
     ].isna().all()
 
+    logger.info("SCD2 upsert completed successfully.")
     return dim_customer
 
 
@@ -150,4 +157,4 @@ dim_customer = scd2_upsert_customer(dim_customer, customers_df)
 
 # Save
 dim_customer.to_csv(output_path, index=False)
-print(dim_customer.info())
+# print(dim_customer.info())

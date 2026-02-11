@@ -37,10 +37,48 @@ def load_business_data():
     # Join static dimensions to fact table
     fact = (
         fact_transactions
-        .merge(dim_categories, on="category_key", how="left")
-        .merge(dim_currencies, on="currency_key", how="left")
-        .merge(dim_dates, on="date_key", how="left")
+        .merge(
+            dim_categories[
+                [
+                    "category_key",
+                    "category",
+                    "is_refundable",
+                    "return_window_days",
+                ]
+            ],
+            on="category_key",
+            how="left",
+        )
+        .merge(
+            dim_currencies[
+                [
+                    "currency_key",
+                    "base_currency",
+                    "transaction_currency",
+                    "currency_imputed",
+                    "conversion_type",
+                    "exchange_rate_source",
+                ]
+            ],
+            on="currency_key",
+            how="left",
+        )
+        .merge(
+            dim_dates[
+                [
+                    "date_key",
+                    "date",
+                    "transaction_day",
+                    "transaction_month",
+                    "transaction_year",
+                    "transaction_weekday",
+                ]
+            ],
+            on="date_key",
+            how="left",
+        )
     )
+
 
     # Enforce datetime types
     fact["date"] = pd.to_datetime(fact["date"])
@@ -60,17 +98,6 @@ def load_business_data():
         (fact["date"] >= fact["effective_from"]) &
         (fact["date"] <= fact["effective_to"])
     ]
-
+    # print(fact.head())
     # Clean duplicated / technical columns
-    return (
-        fact
-        .drop(columns=[
-            "transaction_timestamp",
-            "transaction_timestamp_y",
-            "customer_key_x"
-        ])
-        .rename(columns={
-            "transaction_timestamp_x": "transaction_timestamp",
-            "customer_key_y": "customer_key"
-        })
-    )
+    return fact

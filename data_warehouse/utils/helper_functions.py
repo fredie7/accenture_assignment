@@ -7,6 +7,7 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
+
 # standardize columns
 def standardize_columns(input_data):
     # Convert all column names to lowercase
