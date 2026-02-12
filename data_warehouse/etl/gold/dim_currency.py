@@ -46,7 +46,7 @@ def build_dim_currency(transform_transactions_fn):
     )
 
     dim_currency["currency_key"] = range(1, len(dim_currency) + 1)
-    dim_currency["base_currency"] = "EUR"
+    dim_currency["base_currency"] = transactions_df["base_currency"]
     dim_currency["currency_imputed"] = transactions_df["currency_imputed"].notna()
 
     dim_currency["conversion_type"] = dim_currency["currency_imputed"].map(

@@ -122,6 +122,9 @@ def transform_transactions_data() -> pd.DataFrame:
         transactions_df["amount"] * transactions_df["exchange_rate"]
     ).round(2)
 
+    # Define the base currency
+    transactions_df["base_currency"] = "EUR"
+
     # Quality check to ensure no null values remain in critical columns after transformations
     null_summary = transactions_df.isnull().sum()
     logger.info(f"Final null value summary:\n{null_summary}")
@@ -150,9 +153,9 @@ def transform_transactions_data() -> pd.DataFrame:
     # # Create a new 'date' column by flooring the transaction_timestamp to the nearest day
     # transactions_df["date"] = transactions_df["transaction_timestamp"].dt.floor("D")
 
-
-    print(transactions_df.columns)   
-    print(transactions_df.head()) 
+    
+    # print(transactions_df.columns)   
+    # print(transactions_df.head()) 
     return transactions_df
 
 
