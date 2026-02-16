@@ -8,7 +8,7 @@ The objective covers the breadth of a unified analytics and intelligence system 
 <div align="center">
   <img src="https://github.com/fredie7/accenture_assignment/blob/main/project-images/acc_system_design.png?raw=true" />
   <br>
-   <sub><b>System Design</b></sub>
+   <sub><b>SYSTEM DESIGN</b></sub>
 </div>
   <br>
   <br>
